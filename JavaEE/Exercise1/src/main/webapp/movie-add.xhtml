@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+  <title>Add Movie</title>
+  <meta charset="UTF-8"/>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    .form-group { margin: 1rem 0; }
+    label { display: inline-block; width: 150px; font-weight: bold; }
+    input, select, textarea { width: 300px; padding: 4px; }
+    textarea { height: 80px; }
+    .omdb-section { border: 1px solid #ccc; padding: 1rem; margin: 1rem 0; background: #f9f9f9; }
+    .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+    .checkbox-item { display: flex; align-items: center; }
+  </style>
+</h:head>
+<h:body>
+  <h:form id="frm">
+    <h:messages id="msgs"/>
+
+    <div class="omdb-section">
+      <h3>Fetch from OMDb (Optional)</h3>
+      <div class="form-group">
+        <h:outputLabel for="omdbTitle" value="Movie Title:"/>
+        <h:inputText id="omdbTitle" value="#{movieBean.omdbTitle}" placeholder="e.g. Oppenheimer"/>
+      </div>
+      <div class="form-group">
+        <h:outputLabel for="omdbApiKey" value="OMDb API Key:"/>
+        <h:inputText id="omdbApiKey" value="#{movieBean.omdbApiKey}" placeholder="Get from omdbapi.com"/>
+      </div>
+      <h:commandButton id="btnOmdb" value="Fetch from OMDb"
+                       actionListener="#{movieBean.fetchOmdb}"
+                       update="frm:msgs frm:addPanel"/>
+    </div>
+
+    <div id="addPanel">
+      <h2>Add Movie</h2>
+      <div class="form-group">
+        <h:outputLabel for="title" value="Title:"/>
+        <h:inputText id="title" value="#{movieBean.form.title}" required="true"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="year" value="Year:"/>
+        <h:inputText id="year" value="#{movieBean.form.year}" type="number" min="1888" max="2100"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="genre" value="Genre:"/>
+        <h:inputText id="genre" value="#{movieBean.form.genre}"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="runtime" value="Runtime (min):"/>
+        <h:inputText id="runtime" value="#{movieBean.form.runtimeMin}" type="number" min="1"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="plot" value="Plot:"/>
+        <h:inputTextarea id="plot" value="#{movieBean.form.plotOneLine}" rows="3"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="poster" value="Poster URL:"/>
+        <h:inputText id="poster" value="#{movieBean.form.posterUrl}"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="imdb" value="IMDB ID:"/>
+        <h:inputText id="imdb" value="#{movieBean.form.imdbId}"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="director" value="Director:"/>
+        <h:selectOneMenu id="director" value="#{movieBean.directorId}" required="true">
+          <f:selectItem itemLabel="Select..." itemValue="" noSelectionOption="true"/>
+          <f:selectItems value="#{movieBean.directors}" var="d"
+                         itemValue="#{d.id}" itemLabel="#{d.firstName} #{d.lastName}"/>
+        </h:selectOneMenu>
+        <h:message for="director"/>
+      </div>
+
+      <div class="form-group">
+        <h:outputLabel for="actors" value="Actors:"/>
+        <div class="checkbox-group">
+          <h:selectManyCheckbox id="actors" value="#{movieBean.formActorIds}" layout="pageDirection">
+            <f:selectItems value="#{movieService.allActors()}" var="a"
+                           itemValue="#{a.id}" itemLabel="#{a.fullName}"/>
+          </h:selectManyCheckbox>
+        </div>
+      </div>
+
+      <h:commandButton id="save" value="Save"
+                       action="#{movieBean.save}"
+                       update="frm:msgs"
+                       process="@form"/>
+    </div>
+
+    <h:link outcome="index" value="Back"/>
+  </h:form>
+</h:body>
+</html>

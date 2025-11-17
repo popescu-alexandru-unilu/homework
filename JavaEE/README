@@ -1,0 +1,50 @@
+A working Jakarta EE app (WAR) named Exercise1.war running at http://localhost:8080/Exercise1.
+
+MariaDB schema (SQL dump) with at least 3 tables (directors, actors, movies + a join table).
+
+JSF pages + CDI/EJBs + JPA to:
+
+Add movies (manual form or via OMDb API lookup by title).
+
+Search movies by year (show directors + main actors).
+
+List all titles & years; pick one → show full details.
+
+OMDb API integration (JSON fetch and map to your entities).
+
+README describing model multiplicities/constraints and how to run.
+Database schema (≥3 tables)
+
+DIRECTOR(id PK, name UNIQUE NOT NULL, birth_year NULL)
+
+ACTOR(id PK, name UNIQUE NOT NULL)
+
+MOVIE(id PK, title NOT NULL, year INT NOT NULL, genre VARCHAR, runtime_min INT CHECK >0,
+plot_one_line TEXT, poster_url VARCHAR, imdb_id VARCHAR UNIQUE NULL, director_id FK→DIRECTOR)
+
+MOVIE_ACTORS(movie_id FK, actor_id FK, PRIMARY KEY(movie_id, actor_id)) ← marks “main actors”
+
+Suggested constraints:
+
+UNIQUE(title, year) on MOVIE (avoid duplicates)
+
+CHECK (year BETWEEN 1888 AND EXTRACT(YEAR FROM CURRENT_DATE)+1)
+
+FK constraints with ON DELETE RESTRICT
+
+Multiplicity: One Director → many Movies; one Movie → one Director.
+Many Movies ↔ many Actors (through MOVIE_ACTORS).
+“Main actors” = the actors you link in that join table.
+
+JPA entities (short version)
+
+Director ( @OneToMany(mappedBy="director") List<Movie> )
+
+Actor ( @ManyToMany(mappedBy="actors") List<Movie> )
+
+Movie ( @ManyToOne Director , @ManyToMany @JoinTable(name="MOVIE_ACTORS") Set<Actor> actors )
+
+Core use cases (UI pages)
+
+
+used chat gpt 5 to establish the constraints of our data base the actor is gonna have ...,used ai to generate dummy data to insert in our db;

@@ -1,0 +1,3 @@
+/subsystem=datasources/jdbc-driver=mariadb:add(driver-name=mariadb,driver-module-name=org.mariadb.jdbc,driver-class-name=org.mariadb.jdbc.Driver,xa-datasource-class=org.mariadb.jdbc.MariaDbXADataSource)
+
+/subsystem=datasources/data-source=javaeeDS:add(jndi-name=java:/jdbc/javaeeDS,driver-name=mariadb,connection-url=jdbc:mariadb://${env.DB_HOST:-db}:${env.DB_PORT:-3306}/${env.DB_NAME:-javaee}?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true,user-name=${env.DB_USER:-javaee},password=${env.DB_PASSWORD:-javaee},max-pool-size=20,blocking-timeout-wait-millis=5000,enabled=true)

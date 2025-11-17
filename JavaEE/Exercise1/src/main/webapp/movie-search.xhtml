@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+  <title>Search by Year</title>
+  <meta charset="UTF-8"/>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    .form-group { margin: 1rem 0; }
+    .form-group label { display: inline-block; width: 100px; font-weight: bold; }
+    input { width: 200px; padding: 4px; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+  </style>
+</h:head>
+<h:body>
+  <h:form id="frm">
+    <h:messages id="msgs" showSummary="true" showDetail="true" style="color: red; margin: 1rem 0;"/>
+
+    <h2>Search Movies by Year</h2>
+    <div class="form-group">
+      <h:outputLabel for="year" value="Year:"/>
+      <h:inputText id="year" value="#{movieBean.searchYear}">
+        <f:validateLongRange minimum="1888" maximum="2025"/>
+        <f:ajax event="blur" render="msgs"/>
+      </h:inputText>
+      <h:commandButton value="Search" action="#{movieBean.searchByYear}" update="frm:msgs frm:results"/>
+    </div>
+  </h:form>
+
+  <h:panelGroup id="results" rendered="#{not empty movieBean.searchResults}">
+    <h2>Results</h2>
+    <h:dataTable value="#{movieBean.searchResults}" var="m" style="width: 100%">
+      <h:column>
+        <f:facet name="header">Title</f:facet>
+        <h:outputText value="#{m.title}"/>
+      </h:column>
+      <h:column>
+        <f:facet name="header">Director</f:facet>
+        <h:outputText value="#{m.director.fullName}"/>
+      </h:column>
+      <h:column>
+        <f:facet name="header">Actors</f:facet>
+        <h:outputText value="#{movieBean.actorNames(m)}"/>
+      </h:column>
+    </h:dataTable>
+  </h:panelGroup>
+
+  <h:link outcome="index" value="Back"/>
+</h:body>
+</html>

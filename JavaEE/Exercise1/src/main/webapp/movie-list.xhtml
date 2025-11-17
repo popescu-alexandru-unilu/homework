@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+  <title>Movies - List &amp; Details</title>
+  <meta charset="UTF-8"/>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .details { margin: 1rem 0; padding: 1rem; border: 1px solid #ccc; }
+    .label { font-weight: bold; }
+  </style>
+</h:head>
+<h:body>
+  <h:messages/>
+  <h2>All Movies</h2>
+
+  <h:dataTable value="#{movieBean.all}" var="m" style="width: 100%">
+    <h:column>
+      <f:facet name="header">Title</f:facet>
+      <h:outputText value="#{m.title}"/>
+    </h:column>
+    <h:column>
+      <f:facet name="header">Year</f:facet>
+      <h:outputText value="#{m.year}"/>
+    </h:column>
+    <h:column>
+      <f:facet name="header">Director</f:facet>
+      <h:outputText value="#{m.director.fullName}"/>
+    </h:column>
+    <h:column>
+      <f:facet name="header">Actions</f:facet>
+      <h:form>
+        <h:commandLink value="Details" action="#{movieBean.loadDetails(m.id)}"/>
+      </h:form>
+    </h:column>
+  </h:dataTable>
+
+  <h:panelGroup rendered="#{not empty movieBean.selected}">
+    <div class="details">
+      <h3>#{movieBean.selected.title} (#{movieBean.selected.year})</h3>
+      <table>
+        <tr>
+          <td class="label">Director:</td>
+          <td>#{movieBean.selected.director.fullName}</td>
+        </tr>
+        <tr>
+          <td class="label">Genre:</td>
+          <td>#{movieBean.selected.genre}</td>
+        </tr>
+        <tr>
+          <td class="label">Runtime:</td>
+          <td>#{movieBean.selected.runtimeMin} min</td>
+        </tr>
+        <tr>
+          <td class="label">Actors:</td>
+          <td>#{movieBean.actorNames(movieBean.selected)}</td>
+        </tr>
+      </table>
+
+      <h:panelGroup rendered="#{not empty movieBean.selected.posterUrl}">
+        <h:graphicImage value="#{movieBean.selected.posterUrl}" alt="Poster" style="max-height:300px;margin-top:1rem"/>
+      </h:panelGroup>
+    </div>
+  </h:panelGroup>
+
+  <h:link outcome="index" value="Back"/>
+</h:body>
+</html>

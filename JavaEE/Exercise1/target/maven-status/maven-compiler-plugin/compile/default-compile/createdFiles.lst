@@ -1,0 +1,11 @@
+com\home\backend\model\Movie.class
+com\home\backend\web\MovieResource.class
+com\home\backend\service\DirectorService.class
+com\home\backend\model\Director.class
+com\home\backend\web\RestApplication.class
+com\home\backend\service\MovieService.class
+com\home\backend\web\MovieBean.class
+com\home\backend\model\Actor.class
+com\home\backend\web\DirectorResource.class
+com\home\backend\service\OmdbService.class
+com\home\backend\web\ActorResource.class
